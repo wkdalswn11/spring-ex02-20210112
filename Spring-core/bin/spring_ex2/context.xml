@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="car" class="spring_ex2.Car">
+		<constructor-arg name="t" ref="tire"></constructor-arg>
+	</bean>
+	<bean id="tire" class="spring_ex2.Tire"></bean>
+		
+</beans>
