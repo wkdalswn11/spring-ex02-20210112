@@ -28,7 +28,7 @@ public interface BoardMapper {
 			// 2. 조회된 nextval을 insert에서 사용
 		
 		public BoardVO read(Long bno);
-		
+			
 		public int delete(Long bno);
 		
 		public int update(BoardVO board);

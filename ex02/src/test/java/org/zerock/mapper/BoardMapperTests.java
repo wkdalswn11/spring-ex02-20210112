@@ -2,6 +2,7 @@ package org.zerock.mapper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -71,32 +72,77 @@ public class BoardMapperTests {
 	}
 	@Test
 	public void testRead() {
-		// 존재하는 게시물 번호로 테스트
 		
-		BoardVO board = mapper.read(13L);
+		BoardVO board = new BoardVO();
+		board.setTitle("새로 작성하는 제목");
+		board.setContent("새로 작성하는 내용");
+		board.setWriter("newbie");
 		
+		mapper.insertSelectKey(board);
+		
+		BoardVO readBoard = mapper.read(board.getBno());
+		
+		assertNotNull(readBoard);
+		assertEquals(readBoard.getBno(), board.getBno());
 		log.info(board);
 	}
 	@Test
 	public void testDelete() {
-//		BoardVO board = new BoardVO();
-//		mapper.delete(20L);
+		BoardVO board = new BoardVO();
+		board.setTitle("새로 작성하는 제목");
+		board.setContent("새로 작성하는 내용");
+		board.setWriter("newbie");
 		
-		log.info("DELETE COUNT: " + mapper.delete(11L));
+		mapper.insertSelectKey(board);
+		
+		int before = mapper.getList().size();
+		
+		int cnt = mapper.delete(board.getBno());
+		
+		assertEquals(1, cnt);
+		
+		int after = mapper.getList().size();
+		
+		assertEquals(before-1, after); 
 	}
 	
 	@Test
 	public void testUpdate() {
+		
 		BoardVO board = new BoardVO();
-		// 실행전 존재하는 번호인지 확인할 것.
-		board.setBno(14L);
+		board.setTitle("새로 작성하는 제목");
+		board.setContent("새로 작성하는 내용");
+		board.setWriter("newbie");
+		
+		mapper.insertSelectKey(board);
+		
 		board.setTitle("수정된 제목");
 		board.setContent("수정된 내용");
 		board.setWriter("장민주");
 		
-		int count = mapper.update(board);
-		log.info("UPDATE COUNT: " + count);
-		log.info(board);
+		int cnt = mapper.update(board);
+		
+		assertEquals(1, cnt);
+		
+		BoardVO updateVO = mapper.read(board.getBno());
+		assertEquals("수정된 제목", updateVO.getTitle());
+		assertEquals("수정된 내용", updateVO.getContent());
+		assertEquals("장민주", updateVO.getWriter());
+		
+		
+		
+		
+		
+//		BoardVO board = new BoardVO();
+//		// 실행전 존재하는 번호인지 확인할 것.
+//		board.setBno(14L);
+//		board.setTitle("수정된 제목");
+//		board.setContent("수정된 내용");
+//		board.setWriter("장민주");
+//		
+//		int count = mapper.update(board);
+//		log.info("UPDATE COUNT: " + count);
+//		log.info(board);
 	}
 	
 }
