@@ -14,5 +14,5 @@ public interface CommentService {
 	
 	public boolean delete(Long cno);
 	
-	public CommentVO read(Long cno);
+	public CommentVO get(Long cno);
 }

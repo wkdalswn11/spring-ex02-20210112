@@ -69,7 +69,7 @@ public class CommentMapperTests {
 		int cnt = mapper.update(comment);
 		
 		assertEquals(1, cnt);
-		
+		assertEquals("수정된 댓글", comment.getContent());
 		mapper.getList();
 	}
 	
@@ -84,10 +84,11 @@ public class CommentMapperTests {
 		
 		int before = mapper.getList().size();
 		
-		mapper.delete(comment.getCno());
+		int cnt = mapper.delete(comment.getCno());
 		
 		int after = mapper.getList().size();
 		
+		assertEquals(cnt, 1);
 		assertEquals(before - 1 , after);
 	}
 	
