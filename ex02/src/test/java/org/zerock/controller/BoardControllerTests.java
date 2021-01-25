@@ -50,7 +50,7 @@ public class BoardControllerTests {
 		// 서버를 실행시키지않고 요청을 날릴수있는 가짜 mockMvc를 만드는 것.
 		// 다른 test 되는 메소드보다 가장 먼저 실행되어야 하므로 @Before 사용.
 	}
-	
+	/*
 	@Test
 	public void testExist() {
 		assertNotNull(ctx);
@@ -167,6 +167,19 @@ public class BoardControllerTests {
 		assertEquals("redirect:/board/list", viewName);
 		
 		assertEquals("success" , result.getFlashMap().get("result"));
+	}
+	*/
+	@Test
+	public void testListPaging() throws Exception {
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/board/list")
+											.param("pageNum", "2")
+											.param("amount", "10"))
+			   								.andReturn();
+		
+		Map<String, Object> model = result.getModelAndView().getModel();
+		List list = (List) model.get("list");
+		
+		assertEquals(10, list.size());
 	}
 }
 

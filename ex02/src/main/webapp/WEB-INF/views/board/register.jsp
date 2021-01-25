@@ -2,6 +2,7 @@
   pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="u" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,6 +20,7 @@
 <title>게시글 쓰기</title>
 </head>
 <body>
+<u:navbar></u:navbar>
 <div class="container-sm">
 		<div class="row">
 			<div class="col-12 col-sm-6 offset-sm-3">
@@ -44,6 +46,7 @@
     			<label for="input2">작성자</label>
     			<input name="writer" type="text" class="form-control" id="input2" placeholder="이름을 입력하세요">
   			</div>
+  			
   			
   			 <button type="submit" class="btn btn-primary">글 등록</button>
 		</form>

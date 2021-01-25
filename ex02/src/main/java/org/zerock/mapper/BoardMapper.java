@@ -3,10 +3,16 @@ package org.zerock.mapper;
 import java.util.List;
 
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
 
 public interface BoardMapper {
 		
+		public int getTotalCount(Criteria cri);
+		// SELECT count(*) FROM tb1_board
+		
 		public List<BoardVO> getList();
+		
+		public List<BoardVO> getListWithPaging(Criteria cri); // amount > 한페이지에 몇개를 가져야하는가
 		
 		public void insert(BoardVO board);
 //		{
@@ -32,4 +38,6 @@ public interface BoardMapper {
 		public int delete(Long bno);
 		
 		public int update(BoardVO board);
+		
+		
 }

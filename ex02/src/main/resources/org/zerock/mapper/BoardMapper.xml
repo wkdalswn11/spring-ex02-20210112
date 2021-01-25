@@ -3,46 +3,95 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.zerock.mapper.BoardMapper">
-  <select id="getList" resultType="org.zerock.domain.BoardVO">
-  <!-- <![CDATA[]]> 는 부등호를 사용하기위해 씀  -->
+
+<sql id ="criteria">		<!--  sql 태그에 만들어준걸 밑에서 include태그를 이용하여 갖다쓸 수 있음 -->
+<where>
+	<foreach item="type" collection="typeArr" separator="OR"> <!-- separator="OR" 하면 사이사이에 or추가됨 -->
+		<choose>
+			<when test="type == 'T'.toString()">
+				title LIKE '%' || #{keyword} || '%'
+			</when>
+			<when test="type == 'C'.toString()">
+				content LIKE '%' || #{keyword} || '%'
+			</when>
+			<when test="type == 'W'.toString()">
+				writer LIKE '%' || #{keyword} || '%'
+			</when>
+		</choose>
+	</foreach>
+</where>
+</sql>
+
+	<select id="getList" resultType="org.zerock.domain.BoardVO">
+		<!-- <![CDATA[]]> 는 부등호를 사용하기위해 씀 -->
     <![CDATA[ 
     SELECT * FROM tb1_board WHERE bno > 0
   ]]>
-  </select>
-  
-  	<!-- insert -->
-  <insert id="insert">
-  		INSERT INTO tb1_board (bno, title, content, writer)
-  		VALUES (seq_board.nextval, #{title}, #{content}, #{writer})
-  </insert>
-	
-	<!-- insertSelectKey -->  
-  <insert id="insertSelectKey">
-  		<selectKey keyProperty="bno"  order ="BEFORE" resultType="long">
-  			SELECT seq_board.nextval FROM dual
-  		</selectKey>
-  		INSERT INTO tb1_board (bno, title, content, writer)
-  		VALUES (#{bno}, #{title}, #{content}, #{writer})
-  </insert>
-  
-  <!-- read  -->
-  <select id="read" resultType="org.zerock.domain.BoardVO">
-  		SELECT * FROM tb1_board WHERE bno = #{bno}
-  </select>
-  
-  <!-- delete -->
-  <delete id="delete">
-  		DELETE FROM tb1_board WHERE bno = #{bno}
-  </delete>
-  
-  <!-- update -->
-  <update id="update">
-  		UPDATE tb1_board
-  		SET title = #{title},
-  		content = #{content},
-  		writer = #{writer},
-  		updateDate = SYSDATE
-  		WHERE bno = #{bno}
-  </update>
-  
+	</select>
+
+	<select id="getListWithPaging"
+		resultType="org.zerock.domain.BoardVO">
+  	<![CDATA[ 
+		  	SELECT 
+				bno, title, content, writer, regdate, updatedate
+				FROM
+			(
+			SELECT 
+				ROW_NUMBER() OVER (ORDER BY bno DESC) rn,
+				bno, title, content, writer, 
+				regdate, updatedate	   
+				FROM 
+				tb1_board
+	]]>
+		
+			<include refid="criteria"></include>	<!-- sql 태그에 만들어준걸 갖다쓸수있음. -->
+				
+<![CDATA[
+			)
+			WHERE
+				rn BETWEEN (#{pageNum} - 1) * #{amount} + 1 AND #{pageNum} * #{amount}
+]]>
+	</select>
+
+	<!-- insert -->
+	<insert id="insert">
+		INSERT INTO tb1_board (bno, title, content, writer)
+		VALUES (seq_board.nextval, #{title}, #{content}, #{writer})
+	</insert>
+
+	<!-- insertSelectKey -->
+	<insert id="insertSelectKey">
+		<selectKey keyProperty="bno" order="BEFORE"
+			resultType="long">
+			SELECT seq_board.nextval FROM dual
+		</selectKey>
+		INSERT INTO tb1_board (bno, title, content, writer)
+		VALUES (#{bno}, #{title}, #{content}, #{writer})
+	</insert>
+
+	<!-- read -->
+	<select id="read" resultType="org.zerock.domain.BoardVO">
+		SELECT * FROM tb1_board WHERE bno = #{bno}
+	</select>
+
+	<!-- delete -->
+	<delete id="delete">
+		DELETE FROM tb1_board WHERE bno = #{bno}
+	</delete>
+
+	<!-- update -->
+	<update id="update">
+		UPDATE tb1_board
+		SET title = #{title},
+		content = #{content},
+		writer = #{writer},
+		updateDate = SYSDATE
+		WHERE bno = #{bno}
+	</update>
+
+	<select id="getTotalCount" resultType="int">
+		SELECT count(*) FROM tb1_board
+		<include refid="criteria"></include>
+	</select>
+
 </mapper>
