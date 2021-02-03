@@ -90,6 +90,9 @@
 
 							<td><a href="${boardLink }"> <c:out
 										value="${board.title}" />
+								<c:if test="${board.replyCnt gt 0 }"> <!-- gt는 > 이거랑같음 -->
+								<span class="badge badge-info">${board.replyCnt }</span>
+								</c:if>
 							</a></td>
 							<td><c:out value="${board.writer}" /></td>
 							<td><fmt:formatDate pattern="yyyy-MM-dd/HH:mm"

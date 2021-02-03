@@ -2,6 +2,7 @@ package org.zerock.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
 
@@ -38,6 +39,8 @@ public interface BoardMapper {
 		public int delete(Long bno);
 		
 		public int update(BoardVO board);
+											// 여기서 amount는 실제 갯수가아닌 하나를 더하면 +1 , 하나를지우면 -1 을 하는 것
+		public void updateReplyCnt(@Param("bno") Long bno, @Param("amount") int amount);
 		
 		
 }
